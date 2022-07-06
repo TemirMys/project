@@ -1,5 +1,5 @@
-from django.shortcuts import render, reverse
-from django.http import HttpResponse
+from django.shortcuts import render, reverse, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from .utils import DataMixin
@@ -8,7 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
 
 
-
+def LikeView(request, post_id):
+    post = get_object_or_404(Post, id=request.POST.get('post_like'))
+    post.rating.add(request.user)
+    return HttpResponseRedirect(reverse('post', kwargs={'post_slug': post.slug}))
 
 def Hot_posts(request):
     return HttpResponse('Hot posts page')
@@ -57,8 +60,8 @@ class HomePageView(DataMixin, ListView):
     def get_queryset(self):
         return Post.objects.filter(is_published=True)
 
-# Create your views here.
 
+#Detailed view of post
 class ShowPost(FormMixin, DetailView):
         model = Post
         template_name = 'main/post.html'
@@ -69,10 +72,14 @@ class ShowPost(FormMixin, DetailView):
         def get_success_url(self):
             return reverse('post', kwargs={'post_slug': self.object.slug})
 
+
+
         def get_context_data(self, **kwargs):
             context = super(ShowPost, self).get_context_data(**kwargs)
             context['form'] = CommentForm(initial={'post_id': self.object})
-            # context['comment'] = Comment.objects.get(post_id = context['post'].id)
+            post_rated = get_object_or_404(Post, id=context['post'].pk)
+            total_rating = post_rated.total_rating()
+            context['total_rating'] = total_rating
             return context
 
 

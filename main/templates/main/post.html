@@ -16,9 +16,27 @@
 	<p>Дата: {{post.pub_date|date:"d-m-Y H:i:s"}}</p>
 
 <br>
+<form action="{% url 'like_post' post.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" name="post_like" value="{{ post.id }}">Like</button> - {{ total_rating }} likes
+</form>
 <br>
 <br>
-<p><a href="{% url 'comment' post.pk %}"> Смотреть комментарии</a></p>
+<br>
+
+<p><h2>Комментарии</h2></p>
+<br><br>
+<br>
+{% if not post.comment.all %}
+<p><h2>Комментариев нет</h2></p>
+{% else %}
+{% for c in post.comment.all %}
+<p><h2>{{ c.author_name }}</h2></p>
+<p>{{ c.comment }}</p>
+<p>{{ c.date_create }}</p>
+{% endfor %}
+{% endif %}
+
 <br>
 <br>
 <br>

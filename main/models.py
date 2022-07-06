@@ -18,6 +18,8 @@ class Post(models.Model):
                                     on_delete=models.CASCADE,
 
                                     verbose_name='Имя автора')
+    def total_rating(self):
+        return self.rating.count()
 
     def __str__(self):
         return self.title
@@ -57,7 +59,7 @@ class Comment(models.Model):
     author_name = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Имя автора')
     comment = models.TextField(max_length=2000)
     date_create = models.DateTimeField(auto_now=True, verbose_name='Время создания комментария')
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='id Поста')
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment', verbose_name='id Поста')
 
     def __str__(self):
         return f'Comment for {self.post_id}'
