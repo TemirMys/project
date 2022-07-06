@@ -7,14 +7,13 @@ from autoslug import AutoSlugField
 # Post model
 class Post(models.Model):
     title = models.CharField(max_length=165, verbose_name="Заголовок")
-    slug = AutoSlugField(populate_from='title', unique=True, db_index=True,
-                         unique_with='pub_date', verbose_name="URL")
+    slug = AutoSlugField(populate_from='title', unique=True, db_index=True, unique_with='pub_date', verbose_name="URL")
     content = models.TextField(max_length=20000, verbose_name="Текст статьи")
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name="Фото")
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", blank=True, verbose_name="Фото")
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     is_published = models.BooleanField(default=False, verbose_name="Опубликовано")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
-    rating = models.ManyToManyField(Author, related_name='blog_posts')
+    rating = models.ManyToManyField(Author, related_name='blog_posts', blank=True)
     author_name = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Имя автора')
 
     def __str__(self):
@@ -22,6 +21,12 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
+
+    def image_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
+        else:
+            return 'static/images/no_image.jpg'
 
     class Meta:
         verbose_name = 'Пост'
@@ -31,8 +36,7 @@ class Post(models.Model):
 # Category model
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name="Категория")
-    slug = AutoSlugField(populate_from='name', unique=True, db_index=True,
-                         unique_with='pub_date', verbose_name="URL")
+    slug = AutoSlugField(populate_from='name', unique=True, db_index=True, verbose_name="URL")
 
     def __str__(self):
         return self.name
@@ -51,4 +55,7 @@ class Comment(models.Model):
     comment = models.TextField(max_length=2000)
     date_create = models.DateTimeField(auto_now=True, verbose_name='Время создания комментария')
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='id Поста')
+
+    def __str__(self):
+        return f'Comment for {self.post_id}'
 
