@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% for c in comments %}
+<p> {{c.author_name }}</p>
+<p> {{c.date_create }}</p>
+<p> {{c.comment }}</p>
+{% endfor %}
+
+{% endblock %}

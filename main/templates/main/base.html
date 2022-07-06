@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+{% block mainmenu %}
+<ul>
+{% for m in menu %}
+    <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+{% endfor %}
+    <li><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+</ul>
+
+<br>
+<br>
+<h1>{{title}}</h1>
+{% endblock mainmenu %}
+
+{% block content %}
+{% endblock %}
+<tr><td>
+	<div>
+		<p>Footer.</p>
+	</div>
+</td></tr></table>
+</body>
+</html>

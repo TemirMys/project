@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<h1>{{post.title}}</h1>
+{% if post.photo %}
+<p><img src="{{ post.image_url }}" alt="", width="420" height="280"></p>
+{% else %}
+<p> <img src="{% static 'images/no_image.jpg' %}" alt="", width="420" height="280"></p>
+{% endif %}
+<p>{{ post.content|linebreaks|truncatewords:50 }}</p>
+<p> Автор: {{post.author_name }}
+        <p>Категория: {{post.category}}</p>
+	<p>Дата: {{post.pub_date|date:"d-m-Y H:i:s"}}</p>
+
+<br>
+<br>
+<br>
+<p><a href="{% url 'comment' post.pk %}"> Смотреть комментарии</a></p>
+<br>
+<br>
+<br>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить комментарий</button>
+
+{% endblock %}

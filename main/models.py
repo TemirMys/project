@@ -14,7 +14,10 @@ class Post(models.Model):
     is_published = models.BooleanField(default=False, verbose_name="Опубликовано")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
     rating = models.ManyToManyField(Author, related_name='blog_posts', blank=True)
-    author_name = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Имя автора')
+    author_name = models.ForeignKey(Author,
+                                    on_delete=models.CASCADE,
+
+                                    verbose_name='Имя автора')
 
     def __str__(self):
         return self.title
@@ -31,7 +34,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
-        ordering = ['pub_date']
+        ordering = ['-pub_date']
 
 # Category model
 class Category(models.Model):
@@ -59,3 +62,5 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment for {self.post_id}'
 
+    def get_absolute_url(self):
+        return reverse('comment', kwargs={'post_id': self.post_id})

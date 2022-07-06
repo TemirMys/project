@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% for p in posts %}
+
+    <h2>{{ p.title}}</h2>
+    <p>
+        <img src="{{p.image_url }}" alt="", width="420" height="280">
+        {{ p.content|linebreaks|truncatewords:50 }}
+    <p> Автор: {{p.author_name }}
+        <p>Категория: {{p.category}}</p>
+	<p>Дата: {{p.pub_date|date:"d-m-Y H:i:s"}}</p>
+    <p><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+    </p>
+
+{% endfor %}
+{% endblock %}
