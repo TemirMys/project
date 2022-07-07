@@ -5,4 +5,4 @@ from .models import Author
 class AuthorCreationFrom(UserCreationForm):
     class Meta:
         model = Author
-        fields = ['username', 'password1', 'password2', 'author_name', 'avatar']
+        fields = ['username', 'author_name', 'avatar']

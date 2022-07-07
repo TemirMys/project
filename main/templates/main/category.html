@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+{% if not post %}
+<p><h2>Постов в категории нет</h2></p>
+{% else %}
+    {% for p in post %}
+        {% if p.is_published %}
+        <h2>{{ p.title}}</h2>
+        <br>
+        {% if post.photo %}
+        <p><img src="{{ post.image_url }}" alt="", width="420" height="280"></p>
+        {% else %}
+        <p> <img src="{% static 'images/no_image.jpg' %}" alt="", width="420" height="280"></p>
+        {% endif %}
+        {{ p.content|linebreaks|truncatewords:50 }}
+    <p> Автор: {{p.author_name }}
+        <p>Категория: {{p.category}}</p>
+	<p>Дата: {{p.pub_date|date:"d-m-Y H:i:s"}}</p>
+    <p><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+    </p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% endblock %}
