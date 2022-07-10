@@ -4,22 +4,30 @@
 {% if not post %}
 <p><h2>Постов в категории нет</h2></p>
 {% else %}
+<div class="container">
     {% for p in post %}
         {% if p.is_published %}
-        <h2>{{ p.title}}</h2>
+        <h3><b> {{ p.title}}</h3> </b>
         <br>
         {% if post.photo %}
-        <p><img src="{{ post.image_url }}" alt="", width="420" height="280"></p>
+        <p>
+            <img src="{{ post.image_url }}" alt="", width="420" height="280">
         {% else %}
-        <p> <img src="{% static 'main/images/no_image.jpg' %}" alt="", width="420" height="280"></p>
+        <img src="{% static 'main/images/no_image.jpg' %}" alt="", width="420" height="280">
         {% endif %}
-        {{ p.content|linebreaks|truncatewords:50 }}
-    <p> Автор: {{p.author_name }}
-        <p>Категория: {{p.category}}</p>
-	<p>Дата: {{p.pub_date|date:"d-m-Y H:i:s"}}</p>
-    <p><a href="{{ p.get_absolute_url }}">Читать пост</a></p>
+        {{p.content|linebreaks|truncatewords:50}}
+<a class="btn btn-primary" href="{{ p.get_absolute_url }}" role="button">Читать пост</a>
+
+<br>
+<br>
+    <div   class = "pull-right"><p> &nbsp; &nbsp;Автор: <b> {{p.author_name }} </b> </p></div>
+<div   class = "pull-left"> <p>Категория: <b> {{p.category}}</b> </p> </div>
+<div   class = "pull-right"><p>Дата: {{p.pub_date|date:"d-m-Y H:i:s"}}</p></div>
+<br>
+<br>
     </p>
         {% endif %}
     {% endfor %}
 {% endif %}
+</div>
 {% endblock %}

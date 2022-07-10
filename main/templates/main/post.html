@@ -1,6 +1,5 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
 {% block content %}
 
 
@@ -8,17 +7,17 @@
 {% if post.photo %}
 <p><img src="{{ post.image_url }}" alt="", width="420" height="280"></p>
 {% else %}
-<p> <img src="{% static 'images/no_image.jpg' %}" alt="", width="420" height="280"></p>
+<p> <img src="{% static 'main/images/no_image.jpg' %}" alt="", width="420" height="280"></p>
 {% endif %}
-<p>{{ post.content|linebreaks|truncatewords:50 }}</p>
-<p> Автор: {{post.author_name }}
-        <p>Категория: {{post.category}}</p>
-	<p>Дата: {{post.pub_date|date:"d-m-Y H:i:s"}}</p>
+<p>{{ post.content|linebreaks }}</p>
+<p> Автор: <b> {{post.author_name }} </b></p>
+        <p>Категория: <b>{{post.category}} </b></p>
+	<p>Дата: <b>{{post.pub_date|date:"d-m-Y H:i:s"}}</b></p>
 
 <br>
 <form action="{% url 'like_post' post.pk %}" method="POST">
     {% csrf_token %}
-    <button type="submit" name="post_like" value="{{ post.id }}">Like</button> - {{ total_rating }} - likes
+    <button type="button" class="btn btn-primary">Like <span class="badge bg-secondary">  {{ total_rating }} </span></button>
 </form>
 <br>
 <br>
@@ -43,6 +42,6 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Добавить комментарий</button>
+    <button type="submit" class="btn btn-primary">Добавить комментарий</button>
 
 {% endblock %}

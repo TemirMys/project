@@ -3,21 +3,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{title}}</title>
+
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+
 </head>
 <body>
 {% block mainmenu %}
+<nav   class = "navbar navbar-default"   role = "navigation">
+    <div>
 <ul>
 {% for m in menu %}
-    <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+    <p class="navbar-text"><a href="{% url m.url_name %}">{{m.title}}</a></p>
 {% endfor %}
+
     {% if request.user.is_authenticated %}
-    <li> {{user.author_name }} | <a href="{% url 'logout' %}"> Выйти </a></li>
+    <p class="navbar-text"> <p class = "text-right"> {{user.author_name }} | <a href="{% url 'logout' %}"> Выйти </a></p></p>
     {% else %}
-    <li><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+    <p class="navbar-text"> <p class = "text-right"> <a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></></p>
     {% endif %}
 </ul>
-
+    </div>
+</nav>
 <br>
 <br>
 <h1>{{title}}</h1>
@@ -29,30 +38,50 @@
 <br>
 <br>
 {% if page_obj.has_other_pages %}
-<ul>
-    {% if page_obj.has_previous %}
-<li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
-{% endif %}
-    {% for p in paginator.page_range %}
+<nav aria-label="...">
+  <ul class="pagination">
+      {% if page_obj.has_previous %}
+    <li class="page-item disabled">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">&lt;</a>
+    </li>
+      {% endif %}
+      {% for p in paginator.page_range %}
     {% if page_obj.number == p %}
-    <li> {{ p }} </li>
-    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
-    <li><a href="?page={{p}}"> {{ p }}</a></li>
+      <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#">{{ p }}</a>
+    </li>
+      {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2  %}
+    <li class="page-item"><a class="page-link" href="?page={{p}}">{{ p }}</a></li>
     {% endif %}
     {% endfor %}
-    {% if page_obj.has_next %}
-<li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
-    {% endif %}
-</ul>
+      {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">&gt;</a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+
 {% endif %}
+
 
 <br>
 <br>
 <br>
-<tr><td>
-	<div>
-		<p>Footer.</p>
-	</div>
-</td></tr></table>
+<footer class="bg-dark text-center text-white">
+    <p class="container p-4">
+        <section class="mb-4">
+            <section class="mb-4">
+        <p>
+  <p class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                Футер блог-платформы
+
+    © 2020 Copyright </p>
+  </p>
+
+</div>
 </body>
 </html>
