@@ -23,19 +23,21 @@ def LikeView(request, post_id):
 class HotPostsView(DataMixin, ListView):
     model = Post
     context_object_name = 'posts'
+    slug_url_kwarg = 'post_slug'
     template_name = 'main/hot.html'
 
 
+    def get_queryset(self):
+        #return Post.objects.order_by('-rating').filter(is_published=True).distinct()
+
+        return Post.objects.raw(
+            'Select main_post.*, main_post_rating.id as likes from main_post inner join main_post_rating on (main_post.id = main_post_rating.post_id) where main_post.is_published = True group by main_post.id order by count(main_post_rating.id) desc'
+        )
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        #previous_post = Post.objects.filter(pk=(int(self.kwargs['pk']) - 1))
         user_context = self.get_user_context(title="Популярные посты")
         return dict(list(context.items()) + list(user_context.items()))
-
-    def get_queryset(self):
-        #return Post.objects.filter(is_published=True).order_by('-rating')
-        return Post.objects.raw('Select id, count(id), post_id from  main_post_rating group by  post_id')
-
 
 
 
@@ -59,6 +61,8 @@ class CategoryFilterView(DataMixin, ListView):
     slug_url_kwarg = 'category_slug'
     context_object_name = 'category'
 
+    def get_queryset(self):
+        return Category.objects.filter(slug=self.kwargs['category_slug']).distinct()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CategoryFilterView, self).get_context_data(**kwargs)

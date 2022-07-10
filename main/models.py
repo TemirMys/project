@@ -31,7 +31,7 @@ class Post(models.Model):
         if self.photo and hasattr(self.photo, 'url'):
             return self.photo.url
         else:
-            return 'static/images/no_image.jpg'
+            return 'static/main/images/no_image.jpg'
 
     class Meta:
         verbose_name = 'Пост'

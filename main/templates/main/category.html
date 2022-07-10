@@ -11,7 +11,7 @@
         {% if post.photo %}
         <p><img src="{{ post.image_url }}" alt="", width="420" height="280"></p>
         {% else %}
-        <p> <img src="{% static 'images/no_image.jpg' %}" alt="", width="420" height="280"></p>
+        <p> <img src="{% static 'main/images/no_image.jpg' %}" alt="", width="420" height="280"></p>
         {% endif %}
         {{ p.content|linebreaks|truncatewords:50 }}
     <p> Автор: {{p.author_name }}
