@@ -10,7 +10,7 @@
 <p> <img src="{% static 'main/images/no_image.jpg' %}" alt="", width="420" height="280"></p>
 {% endif %}
 <p>{{ post.content|linebreaks }}</p>
-<p> Автор: <b> {{post.author_name }} </b></p>
+<p> Автор:  <b> {{post.author_name }} </b></p>
         <p>Категория: <b>{{post.category}} </b></p>
 	<p>Дата: <b>{{post.pub_date|date:"d-m-Y H:i:s"}}</b></p>
 
