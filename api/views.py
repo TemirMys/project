@@ -11,6 +11,7 @@ from .permissions import *
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 
+#general viewset
 class PostViewSet(viewsets.ModelViewSet):
     # queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -39,6 +40,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response({'category': category.name})
 
 
+#commentaries viewset
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
