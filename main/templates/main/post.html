@@ -17,7 +17,7 @@
 <br>
 <form action="{% url 'like_post' post.pk %}" method="POST">
     {% csrf_token %}
-    <button type="button" class="btn btn-primary">Like <span class="badge bg-secondary">  {{ total_rating }} </span></button>
+    <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">Like </button> {{ total_rating }} - Likes
 </form>
 <br>
 <br>

@@ -13,7 +13,7 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     is_published = models.BooleanField(default=False, verbose_name="Опубликовано")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
-    rating = models.ManyToManyField(Author, related_name='blog_posts', blank=True)
+    rating = models.ManyToManyField(Author, related_name='like_postm', blank=True)
     author_name = models.ForeignKey(Author,
                                     on_delete=models.CASCADE,
 

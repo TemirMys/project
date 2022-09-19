@@ -15,7 +15,7 @@ from django.core.paginator import Paginator
 
 # Like post button
 def LikeView(request, post_id):
-    post = get_object_or_404(Post, id=request.POST.get('post_like'))
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
     post.rating.add(request.user)
     return HttpResponseRedirect(reverse('post', kwargs={'post_slug': post.slug}))
 
@@ -158,7 +158,7 @@ class ShowPost(DataMixin, FormMixin, DetailView):
             post_rated = get_object_or_404(Post, id=context['post'].pk)
             total_rating = post_rated.total_rating()
             context['total_rating'] = total_rating
-            user_context = self.get_user_context()
+            user_context = self.get_user_context(title=self.object.title)
             return dict(list(context.items()) + list(user_context.items()))
 
 
