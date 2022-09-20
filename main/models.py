@@ -13,7 +13,7 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     is_published = models.BooleanField(default=False, verbose_name="Опубликовано")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категории")
-    rating = models.ManyToManyField(Author, related_name='blog_posts', blank=True)
+    rating = models.ManyToManyField(Author, related_name='like_postm', blank=True)
     author_name = models.ForeignKey(Author,
                                     on_delete=models.CASCADE,
 
@@ -61,8 +61,6 @@ class Comment(models.Model):
     date_create = models.DateTimeField(auto_now=True, verbose_name='Время создания комментария')
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment', verbose_name='id Поста')
 
-    def __str__(self):
-        return f'Comment for {self.post_id}'
 
     def get_absolute_url(self):
         return reverse('comment', kwargs={'post_id': self.post_id})
