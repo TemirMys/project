@@ -61,8 +61,6 @@ class Comment(models.Model):
     date_create = models.DateTimeField(auto_now=True, verbose_name='Время создания комментария')
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment', verbose_name='id Поста')
 
-    def __str__(self):
-        return f'Comment for {self.post_id}'
 
     def get_absolute_url(self):
         return reverse('comment', kwargs={'post_id': self.post_id})

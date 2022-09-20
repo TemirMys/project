@@ -1,7 +1,9 @@
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.utils import json
 from rest_framework.views import APIView
 from .serializers import *
 from Author.models import Author
@@ -40,19 +42,28 @@ class PostViewSet(viewsets.ModelViewSet, CreateModelMixin):
 
     @action(methods=['get'], detail=True) #category by it's category_id
     def category(self, request, pk=None):
-        category = Category.objects.get(pk=pk)
+        category = Post.objects.get(pk=self.kwargs['pk']).category
         return Response({'category': category.name})
 
 
     @action(methods=['post', 'get'], detail=True,
             permission_classes = [IsAuthenticatedOrReadOnly],
             serializer_class = CommentSerializer)
-    def post_comment(self, request, pk=None):
+    def post_comment(self, request, pk=None, **kwargs):
         if request.method == "POST":
-            serializer = self.get_serializer_class(data = request.data)
+
+            post_id = self.kwargs['pk']
+            user_id = Author.objects.get(username = self.request.user.username)
+            print(self.request.user.username, self.kwargs, self.request.data)
+            comment = Comment(comment=request.POST['comment'],
+                              author_name_id = user_id.pk,
+                              post_id_id = self.kwargs['pk'])
+
+            comment.save()
+            return HttpResponseRedirect(redirect_to=f'http://localhost:8000/api/post/{post_id}')
         if request.method == "GET":
-            comment = Comment.objects.get(pk=pk)
-            return Response({'comment': comment.comment})
+            comment = Comment.objects.filter(post_id_id=self.kwargs['pk']).values('author_name', 'comment')
+            return Response(comment)
 
 
 
@@ -88,7 +99,3 @@ class PostViewSet(viewsets.ModelViewSet, CreateModelMixin):
 router = routers.DefaultRouter()
 router.register(r'post', PostViewSet, basename='post')
 # router.register(r'post-comment', Comment2ViewSet)
-
-
-
-# Create your views here.

@@ -13,4 +13,4 @@ class CommentSerializer(serializers.ModelSerializer):
     author_name = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Comment
-        fields = ('author_name', 'post_id', 'comment', )
+        fields = ('author_name', 'comment')
